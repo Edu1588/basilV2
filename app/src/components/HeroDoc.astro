@@ -1,0 +1,199 @@
+---
+// Ilustração do herói: uma carteira de residência e um passaporte, desenhados em SVG,
+// com o check do logo traçado por cima (animado no carregamento da home).
+const lines: string[] = [];
+for (let k = 0; k < 14; k++) {
+  const pts: string[] = [];
+  for (let x = 0; x <= 520; x += 6) {
+    const y = 150 + (70 - k * 4) * Math.sin((x / 520) * Math.PI * 3 + k * 0.45) + 14 * Math.sin((x / 520) * Math.PI * 11 + k);
+    pts.push(`${x},${y.toFixed(1)}`);
+  }
+  lines.push(pts.join(' '));
+}
+const mrz1 = 'RNM<BRA<<BRASILVISA<<<<<<<<<<<<<<<';
+const mrz2 = '0000000<0BRA0000000<<<<<<<<<<<<<<<0';
+---
+
+<div class="hero-stage relative w-full max-w-[620px]">
+<svg viewBox="0 0 640 470" class="hero-doc h-auto w-full max-w-[620px] overflow-visible" role="img" aria-hidden="true">
+  <defs>
+    <linearGradient id="hd-check" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#e0474b" />
+      <stop offset="0.55" stop-color="#cb3438" />
+      <stop offset="1" stop-color="#ffffff" />
+    </linearGradient>
+    <filter id="hd-shadow" x="-10%" y="-10%" width="120%" height="130%">
+      <feDropShadow dx="0" dy="18" stdDeviation="18" flood-color="#000018" flood-opacity=".45" />
+    </filter>
+    <clipPath id="hd-card"><rect x="0" y="0" width="520" height="320" rx="22" /></clipPath>
+  </defs>
+
+  <!-- Passaporte ao fundo -->
+  <g class="hd-passport" transform="translate(392 8) rotate(8)" filter="url(#hd-shadow)">
+    <rect width="230" height="320" rx="16" fill="#33373d" stroke="#ffffff" stroke-opacity=".25" />
+    <rect x="14" y="14" width="202" height="292" rx="10" fill="none" stroke="#ffffff" stroke-opacity=".18" />
+    <circle cx="115" cy="130" r="44" fill="none" stroke="#c8cbe4" stroke-opacity=".55" stroke-width="2" />
+    <path d="M71 130h88M115 86c-18 22-18 66 0 88M115 86c18 22 18 66 0 88" fill="none" stroke="#c8cbe4" stroke-opacity=".55" stroke-width="2" />
+    <rect x="62" y="210" width="106" height="8" rx="4" fill="#c8cbe4" fill-opacity=".5" />
+    <rect x="80" y="228" width="70" height="6" rx="3" fill="#c8cbe4" fill-opacity=".35" />
+  </g>
+
+  <!-- Carteira de residência -->
+  <g class="hd-card" transform="translate(10 120) rotate(-3)" filter="url(#hd-shadow)">
+    <rect width="520" height="320" rx="22" fill="#ffffff" stroke="#c8cbe4" />
+    <g clip-path="url(#hd-card)">
+      <g fill="none" stroke="#33373d" stroke-opacity=".07">
+        {lines.map((p) => <polyline points={p} />)}
+      </g>
+      <rect width="520" height="58" fill="#33373d" />
+      <rect x="28" y="22" width="150" height="10" rx="5" fill="#ffffff" fill-opacity=".85" />
+      <rect x="28" y="38" width="96" height="6" rx="3" fill="#ffffff" fill-opacity=".45" />
+      <rect x="420" y="18" width="72" height="22" rx="11" fill="#cb3438" />
+    </g>
+    <rect x="28" y="84" width="118" height="146" rx="10" fill="#e9ebf5" />
+    <circle cx="87" cy="138" r="26" fill="#c8cbe4" />
+    <path d="M45 222c6-30 26-44 42-44s36 14 42 44z" fill="#c8cbe4" />
+    <g fill="#1d1e33">
+      <rect x="172" y="90" width="72" height="6" rx="3" fill-opacity=".35" />
+      <rect x="172" y="104" width="210" height="11" rx="5" fill-opacity=".8" />
+      <rect x="172" y="134" width="60" height="6" rx="3" fill-opacity=".35" />
+      <rect x="172" y="148" width="150" height="11" rx="5" fill-opacity=".8" />
+      <rect x="340" y="134" width="60" height="6" rx="3" fill-opacity=".35" />
+      <rect x="340" y="148" width="110" height="11" rx="5" fill-opacity=".8" />
+      <rect x="172" y="178" width="84" height="6" rx="3" fill-opacity=".35" />
+      <rect x="172" y="192" width="120" height="11" rx="5" fill-opacity=".8" />
+    </g>
+    <g font-family="ui-monospace, Consolas, monospace" font-size="15.5" letter-spacing="2.1" fill="#1d1e33" fill-opacity=".55">
+      <text x="28" y="270">{mrz1}</text>
+      <text x="28" y="294">{mrz2}</text>
+    </g>
+  </g>
+
+  <!-- Check do logo, traçado sobre a carteira -->
+  <path
+    class="hd-check"
+    d="M310 318 C 350 334, 380 368, 404 424 C 444 312, 512 206, 612 116"
+    fill="none"
+    stroke="url(#hd-check)"
+    stroke-width="22"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <g class="hd-plane" transform="translate(586 70) rotate(-40)">
+    <path d="M0 0 L46 16 L0 32 L10 16 Z" fill="#ffffff" />
+  </g>
+</svg>
+</div>
+
+<style>
+  .hero-stage {
+    perspective: 1200px;
+    transform-style: preserve-3d;
+    cursor: pointer;
+  }
+  .hero-stage .hero-doc {
+    position: relative;
+    transform-origin: center center;
+    transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.35s ease;
+    will-change: transform;
+    animation: heroFloat 6s ease-in-out infinite;
+  }
+  @keyframes heroFloat {
+    0%, 100% {
+      transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(0.6deg);
+    }
+  }
+  .hero-stage:hover .hero-doc {
+    filter: drop-shadow(0 32px 44px rgba(0, 0, 24, 0.65));
+  }
+  .hero-stage .hd-passport,
+  .hero-stage .hd-card,
+  .hero-stage .hd-plane {
+    transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  .hero-stage:hover .hd-passport {
+    transform: translate(398px, 0px) rotate(10deg);
+  }
+  .hero-stage:hover .hd-card {
+    transform: translate(6px, 112px) rotate(-1.5deg);
+  }
+  .hero-stage:hover .hd-plane {
+    transform: translate(594px, 60px) rotate(-38deg) scale(1.1);
+  }
+  .hero-stage :global(.hero-3d) {
+    position: absolute;
+    pointer-events: none;
+    filter: drop-shadow(0 28px 32px rgb(0 0 24 / 0.5));
+  }
+  .hero-stage:global(.is-3d) :global(.hd-card),
+  .hero-stage:global(.is-3d) :global(.hd-passport) { visibility: hidden; }
+</style>
+
+<script>
+  import gsap from 'gsap';
+  import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
+  gsap.registerPlugin(DrawSVGPlugin);
+
+  function play() {
+    const svg = document.querySelector('.hero-doc');
+    if (!svg || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    try {
+      gsap
+        .timeline({ defaults: { ease: 'power3.out' } })
+        .from('.hd-passport', { y: 40, rotate: 18, opacity: 0, duration: 0.9, svgOrigin: '507 168' })
+        .from('.hd-card', { y: 50, opacity: 0, duration: 0.9, svgOrigin: '270 280' }, '<0.12')
+        .from('.hd-check', { drawSVG: '0%', duration: 0.85, ease: 'power2.inOut' }, '-=0.25')
+        .from('.hd-plane', { opacity: 0, x: -30, y: 26, duration: 0.5 }, '-=0.3');
+    } catch {}
+  }
+
+  function initInteractiveHover() {
+    const stage = document.querySelector<HTMLElement>('.hero-stage');
+    const doc = stage?.querySelector<HTMLElement>('.hero-doc');
+    if (!stage || !doc) return;
+
+    const onPointerMove = (e: PointerEvent) => {
+      const rect = stage.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+      const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+      const rotX = -y * 14;
+      const rotY = x * 16;
+      doc.style.transform = `perspective(1000px) rotateX(${rotX.toFixed(2)}deg) rotateY(${rotY.toFixed(2)}deg) translateY(-10px) scale(1.04)`;
+    };
+
+    const onPointerLeave = () => {
+      doc.style.transform = '';
+    };
+
+    stage.addEventListener('pointermove', onPointerMove);
+    stage.addEventListener('pointerleave', onPointerLeave);
+
+    return () => {
+      stage.removeEventListener('pointermove', onPointerMove);
+      stage.removeEventListener('pointerleave', onPointerLeave);
+    };
+  }
+
+  let hero3d: Promise<typeof import('../scripts/hero3d')> | undefined;
+  let hoverCleanup: (() => void) | undefined;
+
+  document.addEventListener('astro:page-load', () => {
+    play();
+    hoverCleanup?.();
+    hoverCleanup = initInteractiveHover();
+
+    // O 3D carrega a partir de 640px caso WebGL esteja disponível
+    if (document.querySelector('.hero-stage') && window.matchMedia('(min-width: 640px)').matches) {
+      hero3d = import('../scripts/hero3d');
+      hero3d.then((m) => m.mountHero3D()).catch(() => {});
+    }
+  });
+
+  document.addEventListener('astro:before-swap', () => {
+    hoverCleanup?.();
+    hero3d?.then((m) => m.unmountHero3D()).catch(() => {});
+  });
+</script>

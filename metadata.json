@@ -1,0 +1,8 @@
+{
+  "name": "BRASILVISA",
+  "description": "Assessoria especializada em autorização de residência, CRNM e agendamento na Polícia Federal para estrangeiros no Brasil.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

@@ -1,0 +1,20 @@
+---
+// Schema Service das páginas de serviço, ligado à empresa pelo @id.
+import { DICTS, href, type Lang, type PageKey } from '../i18n';
+interface Props { lang: Lang; page: PageKey; name: string; description: string }
+const { lang, page, name, description } = Astro.props;
+const site = Astro.site!;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name,
+  description,
+  inLanguage: DICTS[lang].lang,
+  url: new URL(href(lang, page), site).href,
+  provider: { '@id': new URL('/#empresa', site).href },
+  areaServed: { '@type': 'Country', name: 'Brasil' },
+  serviceType: name,
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />

@@ -1,0 +1,18 @@
+---
+import WaIcon from './WaIcon.astro';
+import { DICTS, waLink, type Lang } from '../i18n';
+import type { Dict } from '../i18n/pt';
+interface Props { lang: Lang; wa?: keyof Dict['wa'] }
+const { lang, wa = 'geral' } = Astro.props;
+const t = DICTS[lang];
+---
+
+<div class="fixed inset-x-0 bottom-0 z-30 border-t border-guilloche bg-papel/95 p-3 backdrop-blur lg:hidden">
+  <a href={waLink(lang, wa)} target="_blank" rel="noopener" class="btn btn-wa w-full !py-2">
+    <WaIcon class="h-6 w-6" />
+    <span class="flex flex-col items-start leading-tight">
+      <span>{t.common.mobileCta}</span>
+      <span class="text-xs font-normal">{t.common.mobileCtaNote}</span>
+    </span>
+  </a>
+</div>

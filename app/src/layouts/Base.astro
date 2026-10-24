@@ -1,0 +1,103 @@
+---
+import '@fontsource-variable/montserrat';
+import '@fontsource-variable/heebo';
+import '../styles/global.css';
+import noto400 from '@fontsource/noto-sans-sc/400.css?url';
+import noto700 from '@fontsource/noto-sans-sc/700.css?url';
+import { ClientRouter } from 'astro:transitions';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileCta from '../components/MobileCta.astro';
+import WaFloat from '../components/WaFloat.astro';
+import SchemaOrg from '../components/SchemaOrg.astro';
+import { DICTS, LANGS, href, type Lang, type PageKey } from '../i18n';
+import type { Dict } from '../i18n/pt';
+
+interface Props {
+  lang: Lang;
+  page: PageKey | '404';
+  title: string;
+  description: string;
+  noindex?: boolean;
+  /** Mensagem pronta do WhatsApp usada no cabeçalho, na barra do celular e no botão fixo. */
+  wa?: keyof Dict['wa'];
+}
+const { lang, page, title, description, noindex = false, wa = 'geral' } = Astro.props;
+const t = DICTS[lang];
+const site = Astro.site!;
+const canonical = page === '404' ? undefined : new URL(href(lang, page), site).href;
+const hreflang = { pt: 'pt-BR', en: 'en', zh: 'zh-CN' } as const;
+// Imagem Open Graph gerada por tools/og.py; páginas sem imagem própria usam a da home.
+const ogKey = page === '404' || page === 'obrigado' ? 'home' : page;
+const ogImage = new URL(`/og/${lang}/${ogKey}.png`, site).href;
+---
+
+<!doctype html>
+<html lang={t.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, follow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    {
+      page !== '404' &&
+        LANGS.map((l) => (
+          <link rel="alternate" hreflang={hreflang[l]} href={new URL(href(l, page as PageKey), site).href} />
+        ))
+    }
+    {page !== '404' && <link rel="alternate" hreflang="x-default" href={new URL(href('pt', page as PageKey), site).href} />}
+    {lang === 'zh' && <link rel="stylesheet" href={noto400} />}
+    {lang === 'zh' && <link rel="stylesheet" href={noto700} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#33373d" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="BrasilVisa" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    <meta property="og:locale" content={t.lang.replace('-', '_')} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={title} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <SchemaOrg lang={lang} />
+    <slot name="head" />
+    <ClientRouter />
+  </head>
+  <body class="flex flex-col">
+    <a href="#conteudo" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 btn btn-light">{t.nav.skip}</a>
+    <Header lang={lang} page={page} wa={wa} />
+    <main id="conteudo" class="flex-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <MobileCta lang={lang} wa={wa} />
+    <WaFloat lang={lang} wa={wa} />
+    <script>
+      import Lenis from 'lenis';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import { startMotion, stopMotion } from '../scripts/motion';
+      let lenis: Lenis | null = null;
+      function start() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        lenis?.destroy();
+        lenis = new Lenis({ autoRaf: true, anchors: true });
+        lenis.on('scroll', ScrollTrigger.update);
+      }
+      document.addEventListener('astro:page-load', () => {
+        start();
+        startMotion();
+      });
+      document.addEventListener('astro:before-swap', () => {
+        lenis?.destroy();
+        stopMotion();
+      });
+    </script>
+  </body>
+</html>

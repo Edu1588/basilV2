@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /obrigado
+Disallow: /en/obrigado
+Disallow: /zh/obrigado
+
+Sitemap: https://brasillvisa.com.br/sitemap.xml

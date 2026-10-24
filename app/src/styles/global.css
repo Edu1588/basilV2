@@ -1,0 +1,180 @@
+@import 'tailwindcss';
+@source "../pages";
+@source "../components";
+
+@theme {
+  /* Paleta BrasilVisa (site atual brasillvisa.com.br). Os nomes dos tokens vêm do projeto base. */
+  --color-tinta: #33373d;
+  --color-tinta-escura: #1b1d21;
+  --color-noite: #24272c;
+  --color-carmim: #b8282c;
+  --color-carmim-vivo: #cb3438;
+  --color-papel: #f6f6f7;
+  --color-grafite: #1f2226;
+  --color-grafite-suave: #555b64;
+  --color-guilloche: #d9dbdf;
+  --color-branco: #ffffff;
+
+  --font-sans: 'Heebo Variable', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Montserrat Variable', 'Noto Sans SC', ui-sans-serif, system-ui, sans-serif;
+
+  --text-xs: 0.875rem;
+  --text-sm: 1rem;
+  --text-base: 1.0625rem;
+  --text-lg: 1.3125rem;
+  --text-xl: 1.6875rem;
+  --text-2xl: 2.125rem;
+  --text-3xl: 2.625rem;
+  --text-4xl: 3.3125rem;
+}
+
+@layer base {
+  html {
+    background: var(--color-papel);
+    color: var(--color-grafite);
+    font-family: var(--font-sans);
+    font-size: 100%;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  html:lang(zh-CN) {
+    --font-sans: 'Noto Sans SC', 'Heebo Variable', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Noto Sans SC', 'Montserrat Variable', ui-sans-serif, system-ui, sans-serif;
+  }
+  body {
+    font-size: var(--text-base);
+    line-height: 1.6;
+    min-height: 100svh;
+  }
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    color: var(--color-tinta);
+    font-weight: 700;
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+  }
+  p { text-wrap: pretty; }
+  a { color: inherit; }
+  :focus-visible {
+    outline: 3px solid var(--color-carmim-vivo);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  ::selection { background: var(--color-tinta); color: var(--color-branco); }
+}
+
+@layer components {
+  .wrap {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 2.5rem);
+  }
+  .section { padding-block: clamp(72px, 10vw, 136px); }
+  .measure { max-width: 68ch; }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    min-height: 3.25rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s, box-shadow 0.2s;
+  }
+  .btn-primary { background: var(--color-carmim); color: var(--color-branco); }
+  .guilloche-noite .btn-primary, .bg-noite .btn-primary { background: var(--color-carmim-vivo); }
+  .guilloche-noite .btn-primary:hover, .bg-noite .btn-primary:hover { background: #dd4448; }
+  .btn-primary:hover { background: var(--color-carmim-vivo); }
+  .btn-ghost { color: var(--color-tinta); box-shadow: inset 0 0 0 1.5px var(--color-tinta); }
+  .btn-ghost:hover { background: var(--color-tinta); color: var(--color-branco); }
+  /* Botões de WhatsApp: verde oficial da marca. Texto verde escuro para passar contraste AA (branco no #25D366 dá 1,98:1). */
+  .btn-wa { background: #25d366; color: #053b1e; }
+  .btn-wa:hover { background: #1fbe5b; }
+  .btn-light { background: var(--color-branco); color: var(--color-tinta); }
+  .btn-light:hover { background: var(--color-papel); }
+
+  .text-link {
+    color: var(--color-tinta);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-thickness: 1.5px;
+    text-underline-offset: 0.25em;
+  }
+  .text-link:hover { color: var(--color-carmim); }
+
+  /* Fundo de papel de segurança: linhas de guilhoché muito sutis. */
+  .guilloche {
+    background-color: var(--color-branco);
+    background-image: url('/guilloche.svg');
+    background-size: 520px auto;
+  }
+
+  /* Borda picotada de selo postal (máscara SVG em onda) na base de uma seção. */
+  .guilloche-noite {
+    background-color: var(--color-noite);
+    background-image: url('/guilloche-claro.svg'), radial-gradient(120% 90% at 85% 40%, rgb(203 52 56 / 0.22) 0%, transparent 60%);
+    background-size: 520px auto, 100% 100%;
+    color: var(--color-branco);
+  }
+  .guilloche-noite h1, .guilloche-noite h2, .guilloche-noite h3 { color: var(--color-branco); }
+  .btn-ghost-light { color: var(--color-branco); box-shadow: inset 0 0 0 1.5px rgb(255 255 255 / .6); }
+  .btn-ghost-light:hover { background: var(--color-branco); color: var(--color-noite); }
+
+  .stamp-edge-top {
+    -webkit-mask: radial-gradient(circle 8px at 50% 0, transparent 98%, #000) 0 0 / 24px 100% repeat-x;
+    mask: radial-gradient(circle 8px at 50% 0, transparent 98%, #000) 0 0 / 24px 100% repeat-x;
+  }
+
+  /* Carimbo de fonte oficial. */
+  .source-stamp {
+    display: block;
+    font-size: var(--text-xs);
+    color: var(--color-grafite-suave);
+  }
+  .source-stamp a { color: var(--color-tinta); text-underline-offset: 0.2em; }
+
+  .check-list li {
+    position: relative;
+    padding-left: 2rem;
+    margin-block: 0.7rem;
+  }
+  .check-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.3em;
+    width: 1.1rem;
+    height: 1.1rem;
+    background: var(--color-carmim);
+    -webkit-mask: url('/check.svg') center / contain no-repeat;
+    mask: url('/check.svg') center / contain no-repeat;
+  }
+  .check-light li::before { background: #ff7a7d; }
+  .x-list li {
+    position: relative;
+    padding-left: 2rem;
+    margin-block: 0.7rem;
+  }
+  .x-list li::before {
+    content: '';
+    position: absolute;
+    left: 0.15rem;
+    top: 0.75em;
+    width: 0.9rem;
+    height: 1.5px;
+    background: var(--color-grafite-suave);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

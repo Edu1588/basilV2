@@ -1,0 +1,37 @@
+---
+// Dados estruturados da empresa (schema local), presentes em todas as páginas.
+// Horário de funcionamento e coordenadas ficam de fora até o cliente confirmar.
+import { DICTS, EMAIL, SOCIAL, href, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const site = Astro.site!;
+const t = DICTS[lang];
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  '@id': new URL('/#empresa', site).href,
+  name: 'BrasilVisa',
+  legalName: 'BrasilVisa Assessoria Empresarial Ltda',
+  taxID: '38.076.921/0001-00',
+  description: t.home.meta.description,
+  url: new URL(href(lang, 'home'), site).href,
+  logo: new URL('/logo-cor.webp', site).href,
+  image: new URL(`/og/${lang}/home.png`, site).href,
+  telephone: '+55-11-94973-6011',
+  email: EMAIL,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Av. Marquês de São Vicente, 230, Cj 1619, Barra Funda',
+    addressLocality: 'São Paulo',
+    addressRegion: 'SP',
+    postalCode: '01139-000',
+    addressCountry: 'BR',
+  },
+  areaServed: { '@type': 'Country', name: 'Brasil' },
+  availableLanguage: ['pt-BR', 'en', 'zh-CN'],
+  founder: { '@type': 'Person', name: 'Clariane Alcantara' },
+  sameAs: Object.values(SOCIAL),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />

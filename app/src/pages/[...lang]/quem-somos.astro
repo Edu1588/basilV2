@@ -1,0 +1,59 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import MapEmbed from '../../components/MapEmbed.astro';
+import { DICTS, langPaths, type Lang } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = DICTS[lang];
+const q = t.quemSomos;
+---
+
+<Base lang={lang} page="quemSomos" title={q.meta.title} description={q.meta.description}>
+  <PageHero lang={lang} page="quemSomos" label={t.nav.quemSomos} title={q.title} subtitle={q.text} foto="escritorio" />
+
+  <section class="section">
+    <div class="wrap grid gap-12 lg:grid-cols-[0.9fr_1.4fr]">
+      <div>
+        <h2 class="text-[clamp(1.7rem,3vw,2.4rem)]">{q.howTitle}</h2>
+        {q.years && <p class="mt-4 text-grafite-suave">{q.years}</p>}
+        <p class="mt-4 text-grafite-suave">{q.addresses}</p>
+      </div>
+      <dl class="grid gap-x-12 gap-y-10 sm:grid-cols-2">
+        {
+          q.how.map((w) => (
+            <div class="border-t-2 border-carmim-vivo pt-5">
+              <dt class="text-lg font-bold text-tinta">{w.title}</dt>
+              <dd class="mt-2 text-grafite-suave">{w.text}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  {
+    q.reviews.length > 0 && (
+      <section class="section guilloche !pt-[clamp(56px,7vw,96px)]">
+        <div class="wrap">
+          <h2 class="text-[clamp(1.7rem,3vw,2.4rem)]">{q.reviewsTitle}</h2>
+          <ul class="mt-10 grid gap-6 md:grid-cols-3">
+            {q.reviews.map((r) => (
+              <li class="rounded-2xl bg-branco p-7">
+                <blockquote>
+                  <p>“{r.text}”</p>
+                  <footer class="mt-4 font-semibold text-tinta">{r.name}</footer>
+                </blockquote>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    )
+  }
+
+  <CtaBand lang={lang} title={t.home.formTitle} text={t.home.formText} />
+  <div class="pt-[clamp(72px,10vw,136px)]"><MapEmbed lang={lang} /></div>
+</Base>

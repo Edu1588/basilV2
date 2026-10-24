@@ -1,0 +1,33 @@
+---
+import WaIcon from '../components/WaIcon.astro';
+import Base from '../layouts/Base.astro';
+import { DICTS, LANGS, SERVICES, href, waLink } from '../i18n';
+
+// Página única para os três idiomas: o texto principal em português e os atalhos em cada idioma.
+const t = DICTS.pt;
+---
+
+<Base lang="pt" page="404" title={t.notFound.meta.title} description={t.notFound.meta.description} noindex>
+  <section class="guilloche">
+    <div class="wrap py-20 md:py-28">
+      <p class="text-[clamp(4rem,12vw,9rem)] leading-none font-bold text-guilloche" aria-hidden="true">404</p>
+      <h1 class="mt-4 text-[clamp(2rem,4vw,3.2rem)]">{t.notFound.title}</h1>
+      <p class="mt-4 text-lg text-grafite-suave">{t.notFound.text}</p>
+      <ul class="mt-8 flex flex-wrap gap-3">
+        <li><a href={href('pt', 'home')} class="btn btn-ghost">{t.nav.home}</a></li>
+        {SERVICES.map((s) => <li><a href={href('pt', s)} class="btn btn-ghost">{t.services[s].label}</a></li>)}
+      </ul>
+      <a href={waLink('pt', 'geral')} target="_blank" rel="noopener" class="btn btn-wa mt-8"><WaIcon />{t.common.talk}</a>
+      <div class="mt-14 grid gap-6 border-t border-guilloche pt-8 sm:grid-cols-2">
+        {
+          LANGS.filter((l) => l !== 'pt').map((l) => (
+            <div lang={DICTS[l].lang}>
+              <p class="font-semibold text-tinta">{DICTS[l].notFound.title}</p>
+              <a href={href(l, 'home')} class="text-link mt-1 inline-block">{DICTS[l].nav.home}</a>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

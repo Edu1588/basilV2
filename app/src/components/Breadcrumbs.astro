@@ -1,0 +1,24 @@
+---
+import { DICTS, href, type Lang, type PageKey } from '../i18n';
+interface Props { lang: Lang; page: PageKey; label: string }
+const { lang, page, label } = Astro.props;
+const t = DICTS[lang];
+const site = Astro.site!;
+const ld = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    { '@type': 'ListItem', position: 1, name: t.nav.home, item: new URL(href(lang, 'home'), site).href },
+    { '@type': 'ListItem', position: 2, name: label, item: new URL(href(lang, page), site).href },
+  ],
+};
+---
+
+<nav aria-label={t.common.breadcrumbLabel} class="text-sm text-branco/65">
+  <ol class="flex flex-wrap items-center gap-2">
+    <li><a href={href(lang, 'home')} class="inline-block py-1 hover:text-branco hover:underline">{t.nav.home}</a></li>
+    <li aria-hidden="true">›</li>
+    <li><a href={href(lang, page)} aria-current="page" class="inline-block py-1 text-branco">{label}</a></li>
+  </ol>
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(ld)} />

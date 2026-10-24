@@ -1,0 +1,14 @@
+---
+import { DICTS, type Lang } from '../i18n';
+interface Props { lang: Lang; href: string; label: string; dated?: boolean }
+const { lang, href, label, dated = true } = Astro.props;
+const t = DICTS[lang];
+---
+
+{
+  href && (
+    <p class="source-stamp mt-3">
+      {t.source}: <a href={href} target="_blank" rel="noopener">{label}</a>{dated && `, ${t.checkedOn}`}
+    </p>
+  )
+}

@@ -1,0 +1,198 @@
+---
+import type { Lang } from '../i18n';
+import WaIcon from './WaIcon.astro';
+import Foto from './Foto.astro';
+import { waLink } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const content = {
+  pt: {
+    kicker: 'Metodologia e Cuidado em Cada Etapa',
+    title: 'Como Cuidamos da Sua Chegada e Permanência no Brasil',
+    subtitle: 'Nossa equipe jurídica alia rigor técnico à escuta humanizada, orientando cada passo para que você tenha total tranquilidade.',
+    familyTitle: 'Sua Família Reunida no Brasil com Total Segurança Jurídica',
+    familyDesc: 'Facilitamos o processo de visto e residência para cônjuges, filhos e dependentes, garantindo que a sua transição para o Brasil seja uma experiência de acolhimento e celebração.',
+    familyCta: 'Falar sobre Reunião Familiar',
+    steps: [
+      {
+        title: 'Análise de base legal de residência',
+        detail: 'Avaliamos a modalidade ideal para o seu perfil: trabalho, reunião familiar, investimentos, estudos ou nômade digital.',
+      },
+      {
+        title: 'Checklist customizado de documentos',
+        detail: 'Relação individualizada de certidões, antecedentes criminais, traduções juramentadas e apostilamentos necessários.',
+      },
+      {
+        title: 'Orientação para protocolos e taxas oficiais',
+        detail: 'Instruções para recolhimento exato das guias GRU da União sem divergências cadastrais.',
+      },
+      {
+        title: 'Preparação para atendimento presencial',
+        detail: 'Simulação e checagem de todo o dossiê para a entrevista de coleta biométrica na Polícia Federal.',
+      },
+      {
+        title: 'Suporte em eventuais exigências e correções',
+        detail: 'Acompanhamento imediato caso o órgão público solicite esclarecimentos ou certidões complementares.',
+      },
+      {
+        title: 'Acompanhamento até a entrega da carteira',
+        detail: 'Monitoramento da publicação da autorização no Diário Oficial e da expedição da sua CRNM física e digital.',
+      },
+    ],
+  },
+  en: {
+    kicker: 'Methodology and Care at Every Stage',
+    title: 'How We Guide Your Arrival and Settlement in Brazil',
+    subtitle: 'Our legal team combines technical rigor with empathetic support, ensuring complete peace of mind throughout the process.',
+    familyTitle: 'Your Family Reunited in Brazil with Complete Legal Safety',
+    familyDesc: 'We streamline visa and residency procedures for spouses, children, and dependents, making your relocation to Brazil a welcoming and joyful journey.',
+    familyCta: 'Consult Family Reunification',
+    steps: [
+      {
+        title: 'Legal Basis Analysis for Residency',
+        detail: 'We identify the ideal visa or residency category for you: employment, investment, family reunion, or digital nomad.',
+      },
+      {
+        title: 'Customized Document Checklist',
+        detail: 'Personalized list of certificates, background checks, sworn translations, and Hague apostilles.',
+      },
+      {
+        title: 'Guidance for Protocols and Official Fees',
+        detail: 'Clear instructions for accurate payment of Federal Treasury GRU vouchers without discrepancies.',
+      },
+      {
+        title: 'Preparation for In-Person Appointment',
+        detail: 'Full dossier review ahead of your biometric interview appointment at the Federal Police.',
+      },
+      {
+        title: 'Support for Eventual Requirements',
+        detail: 'Immediate legal assistance if public authorities request supplementary documentation.',
+      },
+      {
+        title: 'Follow-Up Until Final Document Issuance',
+        detail: 'Continuous tracking until your official physical and digital CRNM card is granted and collected.',
+      },
+    ],
+  },
+  zh: {
+    kicker: '专业流程与贴心陪伴',
+    title: '全方位护航您在巴西的居留与定居',
+    subtitle: '我们的资深法律团队将专业规范与温情关怀相结合，助您在巴西稳健开启新生活。',
+    familyTitle: '助您与家人在巴西温馨团圆，合规无忧',
+    familyDesc: '我们协助配偶、子女及长辈办理家庭团聚居留签证，确保全家顺利获得合法身份。',
+    familyCta: '咨询家庭团聚签证',
+    steps: [
+      {
+        title: '居留合法依据精准分析',
+        detail: '量身评估最适合您的移民路径：工作、投资、家庭团聚或数字游民签证。',
+      },
+      {
+        title: '定制化文件与材料清单',
+        detail: '提供完整的公证认证、无犯罪记录及海牙认证（Apostille）指导。',
+      },
+      {
+        title: '官方规费与申报指导',
+        detail: '协助正确缴纳联邦财政GRU规费，避免任何信息录入偏差。',
+      },
+      {
+        title: '联邦警察局现场面谈准备',
+        detail: '全面审核面谈材料，确保指纹采集与现场录入一次性顺利通过。',
+      },
+      {
+        title: '补正与要求全程法律支持',
+        detail: '若遇官方要求补充材料，律师团队第一时间跟进应对。',
+      },
+      {
+        title: '全程跟进至证件签发完成',
+        detail: '实时监控官方公报公布状态，直至正式CRNM外国人身份证顺利签发。',
+      },
+    ],
+  },
+}[lang];
+---
+
+<!-- Grade acolhedora com os 6 passos da metodologia BrasilVisa -->
+<section class="section bg-white border-y border-guilloche">
+  <div class="wrap">
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <p class="font-semibold text-carmim-vivo text-sm tracking-wide uppercase">
+        {content.kicker}
+      </p>
+      <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-tinta mt-2 tracking-tight">
+        {content.title}
+      </h2>
+      <p class="mt-3 text-grafite-suave text-base sm:text-lg leading-relaxed">
+        {content.subtitle}
+      </p>
+    </div>
+
+    <!-- Grade dos 6 cards com estética acolhedora -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+      {
+        content.steps.map((st, idx) => (
+          <div class="group relative rounded-2xl border border-guilloche bg-papel/60 p-6 transition-all hover:bg-white hover:shadow-lg hover:border-carmim/40 flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <span class="w-8 h-8 rounded-full bg-tinta text-branco text-xs font-bold flex items-center justify-center font-mono">
+                  0{idx + 1}
+                </span>
+                <span class="text-xs font-semibold text-carmim uppercase tracking-wider">
+                  Etapa {idx + 1}
+                </span>
+              </div>
+              <h3 class="text-lg font-bold text-tinta group-hover:text-carmim transition-colors leading-snug">
+                {st.title}
+              </h3>
+              <p class="mt-3 text-sm text-grafite-suave leading-relaxed">
+                {st.detail}
+              </p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+
+    <!-- Destaque de acolhimento familiar com ilustração visual acolhedora -->
+    <div class="rounded-3xl bg-gradient-to-br from-tinta to-tinta-escura text-branco overflow-hidden shadow-2xl">
+      <div class="grid grid-cols-1 lg:grid-cols-12 items-center">
+        <div class="lg:col-span-7 p-8 sm:p-12 lg:p-16 space-y-6">
+          <span class="inline-block px-3 py-1 rounded-full bg-carmim text-xs font-bold uppercase tracking-wider text-branco">
+            Acolhimento Familiar
+          </span>
+          <h3 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold !text-branco leading-tight">
+            {content.familyTitle}
+          </h3>
+          <p class="text-sm sm:text-base text-branco/80 leading-relaxed max-w-xl">
+            {content.familyDesc}
+          </p>
+          <div class="pt-2">
+            <a
+              href={waLink(lang, 'reuniao')}
+              target="_blank"
+              rel="noopener"
+              class="btn btn-wa !min-h-12 !py-2.5 text-sm font-bold shadow-md inline-flex items-center gap-2"
+            >
+              <WaIcon />
+              <span>{content.familyCta}</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="lg:col-span-5 h-full min-h-[300px] lg:min-h-[440px] relative overflow-hidden">
+          <Foto
+            name="acolhimento"
+            alt={content.familyTitle}
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>

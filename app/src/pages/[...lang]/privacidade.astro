@@ -1,0 +1,30 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import { DICTS, langPaths, type Lang } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = DICTS[lang];
+const p = t.privacidade;
+---
+
+<Base lang={lang} page="privacidade" title={p.meta.title} description={p.meta.description}>
+  <PageHero lang={lang} page="privacidade" label={t.footer.privacy} title={p.title} trust={false} />
+  <section class="section">
+    <div class="wrap">
+      <div class="measure">
+        <p>{p.controller}</p>
+        <p class="mt-2 text-sm text-grafite-suave">{p.updated}</p>
+        {
+          p.sections.map((s, i) => (
+            <section class="mt-10">
+              <h2 class="text-xl">{i + 1}. {s.title}</h2>
+              <p class="mt-3">{s.text}</p>
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>

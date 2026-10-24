@@ -1,0 +1,48 @@
+---
+import { DICTS, EMAIL, SERVICES, SOCIAL, WHATSAPP_DISPLAY, href, waLink, type Lang } from '../i18n';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = DICTS[lang];
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-tinta-escura pb-28 text-branco/85 lg:pb-0">
+  <div class="wrap grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr]">
+    <div class="max-w-sm">
+      <img src="/logo-escuro.webp" alt="BrasilVisa" width="170" height="36" class="h-9 w-auto" loading="lazy" />
+      <p class="mt-5 font-semibold text-branco">{t.footer.company}</p>
+      <p class="text-sm">{t.footer.cnpj}</p>
+      <address class="mt-4 not-italic leading-relaxed text-sm">
+        {t.footer.hq}<br />
+        {t.footer.branch}<br />
+        <a href={waLink(lang, 'geral')} target="_blank" rel="noopener" class="inline-block py-1 underline underline-offset-4">WhatsApp {WHATSAPP_DISPLAY}</a><br />
+        <a href={`mailto:${EMAIL}`} class="inline-block py-1 underline underline-offset-4">{EMAIL}</a>
+      </address>
+    </div>
+    <nav aria-label={t.nav.servicos}>
+      <h2 class="text-base font-semibold text-branco">{t.nav.servicos}</h2>
+      <ul class="mt-3 space-y-1">
+        {SERVICES.map((s) => <li><a href={href(lang, s)} class="inline-block py-1 hover:text-branco hover:underline">{t.services[s].label}</a></li>)}
+      </ul>
+    </nav>
+    <nav aria-label="BrasilVisa">
+      <h2 class="text-base font-semibold text-branco">BrasilVisa</h2>
+      <ul class="mt-3 space-y-1">
+        <li><a href={href(lang, 'home')} class="inline-block py-1 hover:text-branco hover:underline">{t.nav.home}</a></li>
+        <li><a href={href(lang, 'quemSomos')} class="inline-block py-1 hover:text-branco hover:underline">{t.nav.quemSomos}</a></li>
+        <li><a href={href(lang, 'privacidade')} class="inline-block py-1 hover:text-branco hover:underline">{t.footer.privacy}</a></li>
+      </ul>
+      <ul class="mt-5 flex flex-wrap gap-x-5 gap-y-1 text-sm">
+        <li><a href={SOCIAL.instagram} target="_blank" rel="noopener" class="inline-block py-1 underline underline-offset-4">Instagram</a></li>
+        <li><a href={SOCIAL.facebook} target="_blank" rel="noopener" class="inline-block py-1 underline underline-offset-4">Facebook</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="border-t border-branco/15">
+    <div class="wrap py-8 text-sm leading-relaxed text-branco/65">
+      <p class="max-w-4xl">{t.footer.legal}</p>
+      <p class="mt-4">© {year} BrasilVisa. {t.footer.rights}</p>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,75 @@
+---
+import type { Lang } from '../i18n';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const labels = {
+  pt: {
+    sectionTitle: 'Nossos números',
+    sectionSubtitle: 'Mais de 9 anos de dedicação e resultados comprovados perante as autoridades migratórias brasileiras.',
+    stats: [
+      { num: '8.032', label: 'Clientes Atendidos' },
+      { num: '4.047', label: 'Autorizações de Residência no Brasil' },
+      { num: '1.702', label: 'Passaportes Emitidos' },
+      { num: '997', label: 'Vistos Aprovados' },
+      { num: '1.171', label: 'Naturalizações Brasileiras' },
+    ],
+  },
+  en: {
+    sectionTitle: 'Our Numbers',
+    sectionSubtitle: 'Over 9 years of excellence and verified outcomes with Brazilian immigration authorities.',
+    stats: [
+      { num: '8,032', label: 'Clients Served' },
+      { num: '4,047', label: 'Residency Permits in Brazil' },
+      { num: '1,702', label: 'Passports Issued' },
+      { num: '997', label: 'Visas Approved' },
+      { num: '1,171', label: 'Brazilian Naturalizations' },
+    ],
+  },
+  zh: {
+    sectionTitle: '我们的成果与数据',
+    sectionSubtitle: '九年专注巴西移民与法律合规，协助全球客户顺利在巴西定居。',
+    stats: [
+      { num: '8,032', label: '服务客户总数' },
+      { num: '4,047', label: '巴西居留许可获批' },
+      { num: '1,702', label: '护照办理与签发' },
+      { num: '997', label: '各类签证获批' },
+      { num: '1,171', label: '成功入籍巴西' },
+    ],
+  },
+}[lang];
+---
+
+<!-- Seção Nossos Números oficial da BrasilVisa (fundo escuro institucional com destaques em carmim) -->
+<section class="section bg-[#1b1d21] text-branco relative overflow-hidden py-16 sm:py-20">
+  <div class="wrap relative z-10">
+    <div class="text-center max-w-2xl mx-auto mb-14">
+      <h2 class="text-3xl sm:text-4xl font-extrabold !text-branco font-display tracking-tight">
+        {labels.sectionTitle}
+      </h2>
+      <p class="mt-3 text-sm sm:text-base text-branco/75 leading-relaxed">
+        {labels.sectionSubtitle}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-5 gap-8 text-center items-start">
+      {
+        labels.stats.map((s, idx) => (
+          <div class:list={['flex flex-col items-center', idx === 4 ? 'col-span-2 md:col-span-1' : '']}>
+            <span class="font-display text-4xl lg:text-5xl font-extrabold text-[#cb3438] tabular-nums tracking-tight">
+              {s.num}
+            </span>
+            <div class="w-12 h-0.5 bg-[#cb3438]/50 my-3"></div>
+            <span class="text-xs lg:text-xs font-bold uppercase tracking-wider text-branco/80 leading-snug max-w-[20ch]">
+              {s.label}
+            </span>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

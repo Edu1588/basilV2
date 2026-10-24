@@ -1,0 +1,193 @@
+---
+import WaIcon from './WaIcon.astro';
+import { DICTS, LANGS, SERVICES, href, waLink, type Lang, type PageKey } from '../i18n';
+import type { Dict } from '../i18n/pt';
+
+interface Props { lang: Lang; page: PageKey | '404'; wa?: keyof Dict['wa'] }
+const { lang, page, wa = 'geral' } = Astro.props;
+const t = DICTS[lang];
+const langShort: Record<Lang, string> = { pt: 'PT', en: 'EN', zh: '中文' };
+const langFlags: Record<Lang, string> = { pt: '🇧🇷', en: '🇺🇸', zh: '🇨🇳' };
+const target = page === '404' ? 'home' : page;
+
+const contactLabel = {
+  pt: 'Contato',
+  en: 'Contact',
+  zh: '联系我们',
+}[lang];
+---
+
+<header class="sticky top-0 z-40 border-b border-guilloche/70 bg-papel/95 backdrop-blur-md">
+  <div class="wrap flex h-[4.75rem] items-center justify-between gap-4">
+    
+    <!-- Logo -->
+    <a href={href(lang, 'home')} class="shrink-0" aria-label="BrasilVisa">
+      <img src="/logo-cor.webp" alt="BrasilVisa" width="170" height="36" class="h-8 w-auto sm:h-9" />
+    </a>
+
+    <!-- Menu de Navegação Central (Desktop) -->
+    <nav class="hidden lg:flex items-center gap-6 text-sm font-medium" aria-label="Navegação principal">
+      <a
+        href={href(lang, 'home')}
+        class:list={['hover:text-carmim-vivo transition-colors py-2', page === 'home' ? 'text-tinta font-bold' : 'text-grafite-suave']}
+      >
+        {t.nav.home}
+      </a>
+
+      <!-- Dropdown de Serviços -->
+      <details class="group relative">
+        <summary class="flex items-center gap-1.5 cursor-pointer font-medium text-grafite-suave hover:text-tinta py-2 list-none select-none">
+          <span class="group-hover:text-carmim-vivo transition-colors">{t.nav.servicos}</span>
+          <svg class="w-4 h-4 text-grafite-suave/70 transition-transform duration-200 group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
+          </svg>
+        </summary>
+        <div class="absolute left-0 top-full z-50 mt-2 w-80 rounded-2xl border border-guilloche bg-white p-2.5 shadow-2xl backdrop-blur-md">
+          <div class="px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-grafite-suave/70 border-b border-guilloche/50 mb-1">
+            {t.nav.servicos}
+          </div>
+          {
+            SERVICES.map((k) => (
+              <a
+                href={href(lang, k)}
+                class="flex items-center justify-between rounded-xl px-3 py-2 text-xs font-semibold text-tinta hover:bg-papel hover:text-carmim-vivo transition-colors"
+              >
+                <span>{t.services[k].label}</span>
+                <span class="text-xs text-grafite-suave/50">→</span>
+              </a>
+            ))
+          }
+        </div>
+      </details>
+
+      <a
+        href={href(lang, 'quemSomos')}
+        class:list={['hover:text-carmim-vivo transition-colors py-2', page === 'quemSomos' ? 'text-tinta font-bold' : 'text-grafite-suave']}
+      >
+        {t.nav.quemSomos}
+      </a>
+
+      <a
+        href={href(lang, 'home') + '#contato'}
+        class="text-grafite-suave hover:text-carmim-vivo transition-colors py-2"
+      >
+        {contactLabel}
+      </a>
+    </nav>
+
+    <!-- Idiomas e CTA WhatsApp -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Seletor de Idiomas com Bandeirinhas -->
+      <ul class="flex items-center gap-1 whitespace-nowrap text-sm" aria-label={t.nav.languages}>
+        {
+          LANGS.map((l) => (
+            <li>
+              <a
+                href={href(l, target)}
+                lang={DICTS[l].lang}
+                hreflang={DICTS[l].lang}
+                class:list={[
+                  'inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium transition-colors',
+                  l === lang ? 'bg-tinta text-branco font-semibold shadow-xs' : 'text-grafite-suave hover:bg-guilloche/60 hover:text-tinta'
+                ]}
+                aria-current={l === lang ? 'true' : undefined}
+                data-astro-reload
+              >
+                <span class="text-sm leading-none" aria-hidden="true">{langFlags[l]}</span>
+                <span>{langShort[l]}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <!-- Botão WhatsApp -->
+      <a href={waLink(lang, wa)} target="_blank" rel="noopener" class="btn btn-wa hidden !min-h-11 !py-2 whitespace-nowrap text-[0.95rem] md:inline-flex">
+        <WaIcon />
+        <span>{t.nav.cta}</span>
+      </a>
+
+      <!-- Botão Menu Mobile -->
+      <button
+        id="btn-menu-mobile"
+        type="button"
+        class="lg:hidden p-2 rounded-xl border border-guilloche text-tinta hover:bg-papel transition-colors"
+        aria-label="Abrir menu de navegação"
+        aria-expanded="false"
+      >
+        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+        </svg>
+      </button>
+    </div>
+
+  </div>
+
+  <!-- Gaveta Mobile -->
+  <div id="drawer-menu-mobile" class="hidden lg:hidden border-t border-guilloche bg-white px-4 py-5 space-y-4 shadow-xl">
+    <div class="flex flex-col space-y-2 text-sm font-semibold text-tinta">
+      <a href={href(lang, 'home')} class="py-2 px-3 rounded-lg hover:bg-papel">
+        {t.nav.home}
+      </a>
+      <a href={href(lang, 'quemSomos')} class="py-2 px-3 rounded-lg hover:bg-papel">
+        {t.nav.quemSomos}
+      </a>
+      <a href={href(lang, 'home') + '#contato'} class="py-2 px-3 rounded-lg hover:bg-papel">
+        {contactLabel}
+      </a>
+    </div>
+
+    <!-- Lista de Serviços no Mobile -->
+    <div class="border-t border-guilloche/70 pt-3">
+      <span class="block px-3 text-xs font-bold uppercase tracking-wider text-carmim-vivo mb-2">
+        {t.nav.servicos}
+      </span>
+      <div class="grid grid-cols-1 gap-1 text-xs font-medium text-grafite-suave">
+        {
+          SERVICES.map((k) => (
+            <a href={href(lang, k)} class="py-2 px-3 rounded-md hover:bg-papel hover:text-tinta">
+              {t.services[k].label}
+            </a>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="border-t border-guilloche/70 pt-3">
+      <a href={waLink(lang, wa)} target="_blank" rel="noopener" class="btn btn-wa w-full text-center flex items-center justify-center gap-2">
+        <WaIcon />
+        <span>{t.nav.cta}</span>
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  function setupMobileMenu() {
+    const btn = document.getElementById('btn-menu-mobile');
+    const drawer = document.getElementById('drawer-menu-mobile');
+    if (!btn || !drawer) return;
+
+    btn.addEventListener('click', () => {
+      const isHidden = drawer.classList.contains('hidden');
+      if (isHidden) {
+        drawer.classList.remove('hidden');
+        btn.setAttribute('aria-expanded', 'true');
+      } else {
+        drawer.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Fecha dropdown se clicar fora
+    document.addEventListener('click', (e) => {
+      const details = document.querySelector('header details');
+      if (details && !details.contains(e.target as Node)) {
+        details.removeAttribute('open');
+      }
+    });
+  }
+
+  setupMobileMenu();
+  document.addEventListener('astro:page-load', setupMobileMenu);
+</script>

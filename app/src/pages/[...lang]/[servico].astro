@@ -1,0 +1,137 @@
+---
+// Modelo único das landing pages de serviço. O conteúdo vem de t.services[chave] (i18n/pt.ts, en.ts, zh.ts).
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ServiceAside from '../../components/ServiceAside.astro';
+import SourceStamp from '../../components/SourceStamp.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import ServiceSchema from '../../components/ServiceSchema.astro';
+import Faq from '../../components/Faq.tsx';
+import { DICTS, LANGS, SERVICES, SLUGS, href, type Lang } from '../../i18n';
+import type { Dict, ServiceKey } from '../../i18n/pt';
+
+export function getStaticPaths() {
+  return LANGS.flatMap((lang) =>
+    SERVICES.map((key) => ({
+      params: { lang: lang === 'pt' ? undefined : lang, servico: SLUGS[key] },
+      props: { lang, key },
+    })),
+  );
+}
+
+const { lang, key } = Astro.props as { lang: Lang; key: ServiceKey };
+const t = DICTS[lang];
+const s = t.services[key];
+// Mensagem de WhatsApp e foto de cada serviço (foto ausente: o herói fica sem imagem).
+const WA: Record<ServiceKey, keyof Dict['wa']> = {
+  investidor: 'investidor', imobiliario: 'imobiliario', reuniao: 'reuniao', chineses: 'chineses',
+  crnm: 'crnm', naturalizacao: 'naturalizacao', vistoEua: 'vistoEua',
+};
+const FOTO: Record<ServiceKey, keyof Dict['fotos']> = {
+  investidor: 'investidor',
+  imobiliario: 'imobiliario',
+  reuniao: 'reuniao',
+  chineses: 'chineses',
+  crnm: 'crnm',
+  naturalizacao: 'naturalizacao',
+  vistoEua: 'vistoEua',
+};
+const others = SERVICES.filter((k) => k !== key);
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  inLanguage: t.lang,
+  mainEntity: s.faq.map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } })),
+};
+---
+
+<Base lang={lang} page={key} title={s.meta.title} description={s.meta.description} wa={WA[key]}>
+  <ServiceSchema slot="head" lang={lang} page={key} name={s.label} description={s.meta.description} />
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqLd)} />
+  <PageHero lang={lang} page={key} label={s.label} title={s.hero.title} subtitle={s.hero.subtitle} wa={WA[key]} foto={FOTO[key]} />
+
+  <div class="wrap section grid gap-14 lg:grid-cols-[minmax(0,1fr)_320px]">
+    <div class="space-y-16">
+      {
+        s.blocks.map((b) => (
+          <section>
+            <h2 class="text-2xl">{b.title}</h2>
+            {b.type === 'list' && <ul class="check-list measure mt-4">{b.items.map((i) => <li>{i}</li>)}</ul>}
+            {b.type === 'steps' && (
+              <ol class="measure mt-6 space-y-5">
+                {b.items.map((i, idx) => (
+                  <li class="flex gap-4">
+                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-carmim-vivo text-sm font-bold text-branco">{idx + 1}</span>
+                    <div class="pt-1">
+                      <h3 class="text-lg">{i.title}</h3>
+                      <p class="mt-1 text-grafite-suave">{i.text}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            )}
+            {b.type === 'facts' && (
+              <dl class="mt-6 divide-y divide-guilloche rounded-2xl border border-guilloche bg-branco">
+                {b.items.map((i) => (
+                  <div class="grid gap-1 px-6 py-5 sm:grid-cols-[14rem_1fr] sm:gap-6">
+                    <dt class="font-semibold text-tinta">{i.label}</dt>
+                    <dd>{i.value}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
+            {b.type === 'table' && (
+              <div class="mt-6 overflow-hidden rounded-2xl border border-guilloche bg-branco">
+                <table class="w-full text-left">
+                  <thead class="bg-tinta text-branco">
+                    <tr>{b.head.map((h) => <th scope="col" class="px-6 py-3 font-semibold">{h}</th>)}</tr>
+                  </thead>
+                  <tbody class="divide-y divide-guilloche">
+                    {b.rows.map(([k, v]) => (
+                      <tr>
+                        <th scope="row" class="px-6 py-4 font-normal">{k}</th>
+                        <td class="px-6 py-4 font-bold whitespace-nowrap text-tinta">{v}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+            {b.type === 'text' && b.paragraphs.map((p) => <p class="measure mt-4">{p}</p>)}
+            {b.note && <p class="measure mt-4 text-grafite-suave">{b.note}</p>}
+            {b.src && <SourceStamp lang={lang} href={b.src} label={b.srcLabel ?? ''} />}
+          </section>
+        ))
+      }
+
+      <section>
+        <h2 class="text-2xl">{t.common.faqTitle}</h2>
+        <div class="mt-6">
+          <Faq client:visible items={s.faq} sourceLabel={t.source} />
+        </div>
+      </section>
+    </div>
+
+    <ServiceAside lang={lang} wa={WA[key]} disclaimer={s.disclaimer} />
+  </div>
+
+  <CtaBand lang={lang} title={s.cta.title} text={s.cta.text} wa={WA[key]} />
+
+  <nav aria-label={t.common.otherServices} class="section !pt-[clamp(56px,7vw,96px)]">
+    <div class="wrap">
+      <h2 class="text-2xl">{t.common.otherServices}</h2>
+      <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          others.map((k) => (
+            <li>
+              <a href={href(lang, k)} class="group flex h-full flex-col rounded-2xl border border-guilloche bg-branco p-5 hover:border-carmim-vivo">
+                <span class="font-semibold text-tinta group-hover:text-carmim-vivo">{t.services[k].label}</span>
+                <span class="mt-1 text-sm text-grafite-suave">{t.services[k].card}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </nav>
+</Base>

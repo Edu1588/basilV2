@@ -1,0 +1,24 @@
+---
+import WaIcon from '../../components/WaIcon.astro';
+import Base from '../../layouts/Base.astro';
+import { DICTS, langPaths, href, waLink, type Lang } from '../../i18n';
+
+export const getStaticPaths = langPaths;
+const { lang } = Astro.props as { lang: Lang };
+const t = DICTS[lang];
+const o = t.obrigado;
+---
+
+<Base lang={lang} page="obrigado" title={o.meta.title} description={o.meta.description} noindex>
+  <section class="guilloche">
+    <div class="wrap grid min-h-[70svh] place-content-center py-20 text-center">
+      <span aria-hidden="true" class="mx-auto h-16 w-16 bg-carmim [mask:url(/check.svg)_center/contain_no-repeat]"></span>
+      <h1 class="mt-6 text-[clamp(2rem,4vw,3.2rem)]">{o.title}</h1>
+      <p class="mx-auto mt-4 max-w-[52ch] text-lg text-grafite-suave">{o.text}</p>
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <a href={waLink(lang, 'geral')} target="_blank" rel="noopener" class="btn btn-wa"><WaIcon />{o.waButton}</a>
+        <a href={href(lang, 'home')} class="btn btn-ghost">{o.back}</a>
+      </div>
+    </div>
+  </section>
+</Base>

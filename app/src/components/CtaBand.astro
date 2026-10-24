@@ -1,0 +1,21 @@
+---
+import WaIcon from './WaIcon.astro';
+import { DICTS, waLink, type Lang } from '../i18n';
+import type { Dict } from '../i18n/pt';
+interface Props { lang: Lang; title: string; text?: string; wa?: keyof Dict['wa'] }
+const { lang, title, text, wa = 'geral' } = Astro.props;
+const t = DICTS[lang];
+---
+
+<section class="stamp-edge-top bg-noite text-branco">
+  <div class="wrap grid items-end gap-8 py-16 md:grid-cols-[1fr_auto] md:py-20">
+    <div>
+      <h2 class="max-w-[24ch] text-[clamp(1.75rem,3.2vw,2.6rem)] !text-branco">{title}</h2>
+      {text && <p class="measure mt-4 text-branco/80">{text}</p>}
+    </div>
+    <div class="flex flex-col items-start gap-2">
+      <a href={waLink(lang, wa)} target="_blank" rel="noopener" class="btn btn-wa"><WaIcon />{t.common.talk}</a>
+      <span class="text-sm text-branco/70">{t.common.reply24}</span>
+    </div>
+  </div>
+</section>

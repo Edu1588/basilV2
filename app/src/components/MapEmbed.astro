@@ -1,0 +1,28 @@
+---
+import { ADDRESS_QUERY, DICTS, type Lang } from '../i18n';
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = DICTS[lang];
+const q = encodeURIComponent(ADDRESS_QUERY);
+const hl = { pt: 'pt-BR', en: 'en', zh: 'zh-CN' }[lang];
+---
+
+<section class="section !pt-0">
+  <div class="wrap grid gap-8 md:grid-cols-[1fr_1.6fr] md:items-center">
+    <div>
+      <h2 class="text-[clamp(1.6rem,2.6vw,2.1rem)]">{t.home.where.title}</h2>
+      <address class="mt-4 not-italic text-grafite-suave">{t.footer.hq}<br />{t.footer.branch}</address>
+      <a href={`https://www.google.com/maps/dir/?api=1&destination=${q}`} target="_blank" rel="noopener" class="btn btn-ghost mt-6">
+        {t.home.where.route}
+      </a>
+    </div>
+    <iframe
+      title={t.home.where.title}
+      src={`https://maps.google.com/maps?q=${q}&hl=${hl}&z=15&output=embed`}
+      loading="lazy"
+      referrerpolicy="no-referrer-when-downgrade"
+      sandbox="allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+      class="aspect-[16/10] w-full rounded-2xl border border-guilloche bg-branco"
+    ></iframe>
+  </div>
+</section>

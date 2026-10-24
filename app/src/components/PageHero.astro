@@ -1,0 +1,49 @@
+---
+import WaIcon from './WaIcon.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import Foto from './Foto.astro';
+import { DICTS, waLink, type Lang, type PageKey } from '../i18n';
+import type { Dict } from '../i18n/pt';
+
+interface Props {
+  lang: Lang;
+  page: PageKey;
+  label: string;
+  title: string;
+  subtitle?: string;
+  wa?: keyof Dict['wa'];
+  trust?: boolean;
+  /** Nome da foto em src/assets/fotos (sem extensão); a chave do alt vem de t.fotos. */
+  foto?: keyof Dict['fotos'];
+}
+const { lang, page, label, title, subtitle, wa, trust = true, foto } = Astro.props;
+const t = DICTS[lang];
+---
+
+<section class="guilloche-noite">
+  <div class:list={['wrap pt-8 pb-14 md:pt-10 md:pb-20', foto && 'grid items-end gap-10 lg:grid-cols-[1.15fr_0.85fr]']}>
+    <div>
+    <Breadcrumbs lang={lang} page={page} label={label} />
+    <h1 class="mt-8 max-w-[22ch] text-[clamp(2.1rem,4.4vw,3.6rem)]">{title}</h1>
+    {subtitle && <p class="measure mt-5 text-lg text-branco/80">{subtitle}</p>}
+    {
+      wa && (
+        <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+          <a href={waLink(lang, wa)} target="_blank" rel="noopener" class="btn btn-wa"><WaIcon />{t.common.talk}</a>
+          <span class="text-sm text-branco/70">{t.common.reply24}</span>
+        </div>
+      )
+    }
+    </div>
+    {foto && <Foto name={foto} alt={t.fotos[foto]} loading="eager" class="aspect-[4/3] w-full rounded-2xl object-cover shadow-[0_24px_48px_rgb(0_0_24/0.45)]" />}
+  </div>
+  {
+    trust && (
+      <div class="border-t border-branco/15">
+        <ul class="check-list check-light wrap flex flex-wrap gap-x-8 py-2 text-sm text-branco/75">
+          {t.common.trust.map((item) => <li class="!pl-6 before:!top-[0.2em] before:!h-3.5 before:!w-3.5">{item}</li>)}
+        </ul>
+      </div>
+    )
+  }
+</section>
